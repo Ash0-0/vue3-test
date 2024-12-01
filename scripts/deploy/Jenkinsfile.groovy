@@ -1,0 +1,96 @@
+pipeline {
+    agent {
+        docker {
+            image 'node:20' // 使用 Node.js 20 官方镜像
+            args '-v /var/run/docker.sock:/var/run/docker.sock' // 挂载 Docker Socket 支持 Docker 命令
+        }
+    }
+
+    environment {
+        CACHE_DIR = '.npm_cache' // npm 缓存目录
+    }
+
+    stages {
+        stage('Generate Version') {
+            steps {
+                echo "Generating new version..."
+                script {
+                    // 使用 pnpm 生成新版本号并提交更新
+                    sh '''
+                    pnpm version patch --no-git-tag-version // 递增 PATCH 版本
+                    NEW_VERSION=$(node -p "require('./package.json').version") // 获取新版本号
+                    echo "NEW_VERSION=${NEW_VERSION}" > version.env // 将版本号保存到文件
+                    '''
+                }
+            }
+        }
+
+        stage('Load Version') {
+            steps {
+                script {
+                    // 加载版本号到环境变量
+                    def version = readFile('version.env').trim().split('=')[1]
+                    env.IMAGE_TAG = "vben-admin-local:${version}" // 设置镜像 Tag
+                }
+                echo "Loaded version: ${env.IMAGE_TAG}"
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                echo "Installing dependencies..."
+                // 安装项目依赖，启用缓存
+                sh '''
+                npm config set cache ${CACHE_DIR}
+                if [ -d node_modules ]; then
+                    echo "Dependencies already installed, skipping..."
+                else
+                    pnpm install --prefer-offline
+                fi
+                '''
+            }
+        }
+
+        stage('Code Check') {
+            steps {
+                echo "Running Check..."
+                // 检查代码规范
+                sh '''
+                pnpm run check || { echo "Code Check Failed"; exit 1; }
+                '''
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo "Building Docker image: ${env.IMAGE_TAG}"
+                // 构建 Docker 镜像
+                sh '''
+                docker build . -f Dockerfile -t ${env.IMAGE_TAG}
+                '''
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                echo "Pushing Docker image: ${env.IMAGE_TAG}"
+                // 推送镜像到 Docker Registry（如有需要）
+                sh '''
+                docker push ${env.IMAGE_TAG}
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '''
+            Docker image built and tests passed successfully!
+            Image Tag: ${env.IMAGE_TAG}
+            '''
+        }
+        failure {
+            echo "Build or tests failed. Check the logs for more details."
+        }
+    }
+}
