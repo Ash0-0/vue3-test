@@ -11,6 +11,13 @@ pipeline {
     }
 
     stages {
+      stage('Checkout Code') {
+            steps {
+                echo "Pulling code from public repository via HTTPS..."
+                git branch: 'main',
+                url: 'https://github.com/Ash0-0/vue3-test.git'
+              }
+        }      
         stage('Generate Version') {
             steps {
                 echo "Generating new version..."
