@@ -64,10 +64,10 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo "Building Docker image: ${env.IMAGE_TAG}"
-                // 构建 Docker 镜像
-                sh '''
+                // Use triple double quotes to allow Groovy variable interpolation in shell script
+                sh """
                 docker build . -f Dockerfile -t ${env.IMAGE_TAG}
-                '''
+                """
             }
         }
 
