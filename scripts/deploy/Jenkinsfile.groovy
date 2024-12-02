@@ -26,13 +26,11 @@ pipeline {
             steps {
                 echo "Generating new version..."
                 script {
-                    // Ensure Jenkins environment variables are available for shell execution
-                    def newVersion = "${env.BUILD_DATE_FORMATTED}-develop-${env.BUILDS_TODAY}"
-
-                    // Generate the version and write it to a file
-                    sh """
-                    echo "NEW_VERSION=${newVersion}" > version.env
-                    """
+                    // 使用 pnpm 生成新版本号并提交更新
+                    sh '''
+                    NEW_VERSION = getVersionNumber()  // 获取新版本号
+                    echo "NEW_VERSION=${NEW_VERSION}" > version.env // 将版本号保存到文件
+                    '''
                 }
             }
         }
