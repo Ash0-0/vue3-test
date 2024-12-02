@@ -28,6 +28,8 @@ pipeline {
                 script {
                     // 使用 pnpm 生成新版本号并提交更新
                     sh '''
+                    corepack enable
+                    corepack prepare pnpm@latest-10 --activate
                     pnpm version patch --no-git-tag-version // 递增 PATCH 版本
                     NEW_VERSION=$(node -p "require('./package.json').version") // 获取新版本号
                     echo "NEW_VERSION=${NEW_VERSION}" > version.env // 将版本号保存到文件
