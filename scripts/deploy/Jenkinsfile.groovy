@@ -15,12 +15,6 @@ pipeline {
 
 
     stages {
-      stage('Debug PATH') {
-                          steps {
-                              sh 'echo $PATH'
-                              sh 'which pnpm'
-                          }
-                      }
       stage('Checkout Code') {
             steps {
                 echo "Pulling code from public repository via HTTPS..."
