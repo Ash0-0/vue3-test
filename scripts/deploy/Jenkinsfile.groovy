@@ -28,7 +28,7 @@ pipeline {
                 script {
                     // 使用 pnpm 生成新版本号并提交更新
                     sh '''
-                    NEW_VERSION=$ag = VersionNumber (versionNumberString: '${BUILD_DATE_FORMATTED, "yyyyMMdd"}-develop-${BUILDS_TODAY}') // 获取新版本号
+                    NEW_VERSION = VersionNumber (versionNumberString: '${BUILD_DATE_FORMATTED, "yyyyMMdd"}-develop-${BUILDS_TODAY}') // 获取新版本号
                     echo "NEW_VERSION=${NEW_VERSION}" > version.env // 将版本号保存到文件
                     '''
                 }
