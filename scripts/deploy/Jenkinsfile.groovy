@@ -13,16 +13,16 @@ pipeline {
             CREDENTIALS_ID = 'docker-hub-credentials' // Jenkins 中配置的凭据 ID
     }
 
-    stages {
-            stage('Debug PATH') {
-                steps {
-                    sh 'echo $PATH'
-                    sh 'which pnpm'
-                }
-            }
-        }
 
     stages {
+      stages {
+                stage('Debug PATH') {
+                    steps {
+                        sh 'echo $PATH'
+                        sh 'which pnpm'
+                    }
+                }
+            }
       stage('Checkout Code') {
             steps {
                 echo "Pulling code from public repository via HTTPS..."
