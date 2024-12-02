@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'node:20' // 使用 Node.js 20 官方镜像
+            image 'docker:latest' // 使用 Node.js 20 官方镜像
             args '-v /var/run/docker.sock:/var/run/docker.sock' // 挂载 Docker Socket 支持 Docker 命令
         }
     }
