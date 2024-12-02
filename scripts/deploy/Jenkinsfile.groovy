@@ -30,10 +30,8 @@ pipeline {
                     def BUILD_DATE_FORMATTED = new Date().format('yyyyMMdd') // Current date in yyyyMMdd format
                     def BUILD_NUMBER = env.BUILD_NUMBER // Jenkins build number
                     def NEW_VERSION = "${BUILD_DATE_FORMATTED}-build-${BUILD_NUMBER}"
-                    def version = NEW_VERSION.trim().split('=')[1]
                     echo "Generated Version: ${NEW_VERSION}"
-                    env.IMAGE_TAG = "vben-admin-local:${version}" // 设置镜像 Tag
-                    echo "NEW_VERSION=${NEW_VERSION}" > version.env // 将版本号保存到文件
+                    env.IMAGE_TAG = "vben-admin-local:${NEW_VERSION}" // 设置镜像 Tag
                 }
             }
         }
