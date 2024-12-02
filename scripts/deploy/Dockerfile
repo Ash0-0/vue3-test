@@ -9,19 +9,19 @@ ENV TZ=Asia/Shanghai
 RUN corepack enable
 
 WORKDIR /app
-RUN apt-get update && apt-get install -y unzip
+
 # copy package.json and pnpm-lock.yaml to workspace
 COPY . /app
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-RUN pnpm run build --filter=\!./docs
-RUN unzip /app/apps/web-antd/dist.zip -d /app/web-ant/
+RUN pnpm run build:antd
+
 RUN echo "Builder Success 🎉"
 
 FROM nginx:stable-alpine AS production
 
 RUN echo "types { application/javascript js mjs; }" > /etc/nginx/conf.d/mjs.conf
-COPY --from=builder /app/web-antd /usr/share/nginx/html
+COPY --from=builder /app/apps/web-antd/dist /usr/share/nginx/html
 
 COPY --from=builder /app/scripts/deploy/nginx.conf /etc/nginx/nginx.conf
 
