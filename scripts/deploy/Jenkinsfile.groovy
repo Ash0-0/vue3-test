@@ -7,7 +7,10 @@ pipeline {
     }
 
     environment {
-        CACHE_DIR = '.npm_cache' // npm 缓存目录
+            PATH = "/usr/local/bin:$PATH"
+            CACHE_DIR = '.npm_cache' // npm 缓存目录
+            DOCKER_REGISTRY = 'docker.io' // Docker Hub 注册表地址
+            CREDENTIALS_ID = 'docker-hub-credentials' // Jenkins 中配置的凭据 ID
     }
 
     stages {
@@ -80,11 +83,16 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                echo "Pushing Docker image: ${env.IMAGE_TAG}"
-                // 推送镜像到 Docker Registry（如有需要）
-                sh '''
-                docker push ${env.IMAGE_TAG}
-                '''
+                echo "Pushing Docker image to registry..."
+                script {
+                    withCredentials([usernamePassword(credentialsId: env.CREDENTIALS_ID, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        // 登录 Docker Registry
+                        sh "echo $PASSWORD | docker login ${DOCKER_REGISTRY} -u $USERNAME --password-stdin"
+
+                        // 推送镜像
+                        sh "docker push ${env.IMAGE_TAG}"
+                    }
+                }
             }
         }
     }
