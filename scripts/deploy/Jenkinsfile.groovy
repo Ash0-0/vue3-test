@@ -28,8 +28,10 @@ pipeline {
             steps {
                 echo "Generating new version..."
                 script {
-                    // Generate the version number using Jenkins Version Number Plugin in Groovy context
-                    def NEW_VERSION = VersionNumber(versionNumberString: "${BUILD_DATE_FORMATTED, 'yyyyMMdd'}-develop-${BUILDS_TODAY}")
+                    // Generate version number using the current date and Jenkins build number
+                    def BUILD_DATE_FORMATTED = new Date().format('yyyyMMdd') // Current date in yyyyMMdd format
+                    def BUILD_NUMBER = env.BUILD_NUMBER // Jenkins build number
+                    def NEW_VERSION = "${BUILD_DATE_FORMATTED}-build-${BUILD_NUMBER}"
 
                     echo "Generated Version: ${NEW_VERSION}"
 
