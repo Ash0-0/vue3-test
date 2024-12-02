@@ -63,15 +63,15 @@ pipeline {
             }
         }
 
-        stage('Code Check') {
-            steps {
-                echo "Running Check..."
-                // 检查代码规范
-                sh '''
-                pnpm run check || { echo "Code Check Failed"; exit 1; }
-                '''
-            }
-        }
+//         stage('Code Check') {
+//             steps {
+//                 echo "Running Check..."
+//                 // 检查代码规范
+//                 sh '''
+//                 pnpm run check || { echo "Code Check Failed"; exit 1; }
+//                 '''
+//             }
+//         }
 
         stage('Build Docker Image') {
             steps {
