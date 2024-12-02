@@ -9,7 +9,7 @@ ENV TZ=Asia/Shanghai
 RUN corepack enable
 
 WORKDIR /app
-
+RUN apt-get update && apt-get install -y unzip
 # copy package.json and pnpm-lock.yaml to workspace
 COPY . /app
 
