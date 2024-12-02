@@ -7,8 +7,6 @@ pipeline {
     }
 
     environment {
-            BUILD_DATE_FORMATTED = "20231202"  // Example date format
-            BUILDS_TODAY = 1  // Example build count
             PATH = "/usr/local/bin:$PATH"
             CACHE_DIR = '.npm_cache' // npm 缓存目录
             DOCKER_REGISTRY = 'docker.io' // Docker Hub 注册表地址
@@ -32,11 +30,8 @@ pipeline {
                     def BUILD_DATE_FORMATTED = new Date().format('yyyyMMdd') // Current date in yyyyMMdd format
                     def BUILD_NUMBER = env.BUILD_NUMBER // Jenkins build number
                     def NEW_VERSION = "${BUILD_DATE_FORMATTED}-build-${BUILD_NUMBER}"
-
                     echo "Generated Version: ${NEW_VERSION}"
-
-                    // Save the version number to a file
-                    writeFile(file: 'version.env', text: "NEW_VERSION=${NEW_VERSION}")
+                    echo "NEW_VERSION=${NEW_VERSION}" > version.env // 将版本号保存到文件
                 }
             }
         }
@@ -61,8 +56,6 @@ pipeline {
                 if [ -d node_modules ]; then
                     echo "Dependencies already installed, skipping..."
                 else
-                    corepack enable
-                    corepack prepare pnpm@latest --activate
                     pnpm install --prefer-offline
                 fi
                 '''
