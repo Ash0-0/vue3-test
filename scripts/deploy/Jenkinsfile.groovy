@@ -15,7 +15,7 @@ pipeline {
 
 
     stages {
-      stages {
+      stage {
                 stage('Debug PATH') {
                     steps {
                         sh 'echo $PATH'
