@@ -76,7 +76,7 @@ pipeline {
                 echo "Building Docker image: ${env.IMAGE_TAG}"
                 // Use triple double quotes to allow Groovy variable interpolation in shell script
                 sh """
-                docker build . -f ./Dockerfile -t ${env.IMAGE_TAG}
+                docker build -f Dockerfile . -t ${env.IMAGE_TAG}
                 """
             }
         }
