@@ -90,7 +90,7 @@ pipeline {
                         sh "echo $PASSWORD | docker login ${DOCKER_REGISTRY} -u $USERNAME --password-stdin"
 
                         // 推送镜像
-                        sh "docker push ${env.IMAGE_TAG}"
+                        sh "docker push $USERNAME/${env.IMAGE_TAG}"
                     }
                 }
             }
