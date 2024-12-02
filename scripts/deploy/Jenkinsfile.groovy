@@ -26,13 +26,11 @@ pipeline {
             steps {
                 echo "Generating new version..."
                 script {
-                    // Use the Jenkins Version Number plugin to get the new version number
-                    def NEW_VERSION = getVersionNumber()  // Getting the new version number
-
-                    echo "New Version: ${NEW_VERSION}"
-
-                    // Save the version number to a file
-                    writeFile(file: 'version.env', text: "NEW_VERSION=${NEW_VERSION}")
+                    // 使用 pnpm 生成新版本号并提交更新
+                    sh '''
+                    NEW_VERSION = 'test'  // 获取新版本号
+                    echo "NEW_VERSION=${NEW_VERSION}" > version.env // 将版本号保存到文件
+                    '''
                 }
             }
         }
