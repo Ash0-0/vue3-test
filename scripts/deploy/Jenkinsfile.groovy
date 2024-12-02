@@ -22,6 +22,16 @@ pipeline {
                 url: 'https://github.com/Ash0-0/vue3-test.git'
               }
         }
+        stage('Install Node.js and npm') {
+                    steps {
+                        echo "Installing Node.js and npm..."
+                        sh """
+                        # Install Node.js (which includes npm)
+                        apk add --no-cache nodejs npm
+                        """
+                    }
+                }
+
         stage('Generate Version') {
             steps {
                 echo "Generating new version..."
