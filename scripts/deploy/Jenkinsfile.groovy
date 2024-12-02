@@ -7,6 +7,8 @@ pipeline {
     }
 
     environment {
+            BUILD_DATE_FORMATTED = "20231202"  // Example date format
+            BUILDS_TODAY = 1  // Example build count
             PATH = "/usr/local/bin:$PATH"
             CACHE_DIR = '.npm_cache' // npm 缓存目录
             DOCKER_REGISTRY = 'docker.io' // Docker Hub 注册表地址
