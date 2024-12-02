@@ -15,7 +15,7 @@ COPY . /app
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build --filter=\!./docs
-RUN unzip /app/web-ant/dist.zip -d /app/web-ant/
+RUN unzip /app/apps/web-antd/dist.zip -d /app/web-ant/
 RUN echo "Builder Success 🎉"
 
 FROM nginx:stable-alpine AS production
